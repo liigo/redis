@@ -481,6 +481,14 @@ func (client *Client) Set(key string, val []byte) error {
     return nil
 }
 
+func (client *Client) SetStr(key string, val string) error {
+	return client.Set(key, []byte(val))
+}
+
+func (client *Client) SetInt(key string, val int64) error {
+	return client.Set(key, []byte(strconv.FormatInt(val, 10)))
+}
+
 func (client *Client) Get(key string) ([]byte, error) {
     res, _ := client.sendCommand("GET", key)
     if res == nil {
@@ -489,6 +497,20 @@ func (client *Client) Get(key string) ([]byte, error) {
 
     data := res.([]byte)
     return data, nil
+}
+
+func (client *Client) GetStr(key string) (string, error) {
+	data, err := client.Get(key);
+	return string(data), err
+}
+
+func (client *Client) GetInt(key string) (int64, error) {
+	data, err := client.Get(key)
+	if err != nil {
+		return 0, err
+	}
+	val, err := strconv.ParseInt(string(data), 10, 64)
+	return val, err
 }
 
 func (client *Client) Getset(key string, val []byte) ([]byte, error) {
