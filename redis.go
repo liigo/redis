@@ -511,7 +511,7 @@ func (client *Client) GetStr(key string) (string, error) {
         return "", RedisError("Key `" + key + "` does not exist")
     }
 
-    return res.(string), nil
+    return string(res.([]byte)), nil
 }
 
 func (client *Client) GetInt(key string) (int64, error) {
