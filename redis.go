@@ -492,7 +492,7 @@ func (client *Client) SetStr(key string, val string) error {
 }
 
 func (client *Client) SetInt(key string, val int64) error {
-	return client.SetStr(key, strconv.FormatInt(val, 10))
+    return client.SetStr(key, strconv.FormatInt(val, 10))
 }
 
 func (client *Client) Get(key string) ([]byte, error) {
@@ -515,12 +515,12 @@ func (client *Client) GetStr(key string) (string, error) {
 }
 
 func (client *Client) GetInt(key string) (int64, error) {
-	res, err := client.GetStr(key)
-	if err != nil {
-		return 0, err
-	}
-	val, err := strconv.ParseInt(res, 10, 64)
-	return val, err
+    res, err := client.GetStr(key)
+    if err != nil {
+        return 0, err
+    }
+    val, err := strconv.ParseInt(res, 10, 64)
+    return val, err
 }
 
 func (client *Client) Getset(key string, val []byte) ([]byte, error) {
