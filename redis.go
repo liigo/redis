@@ -481,6 +481,20 @@ func (client *Client) Set(key string, val []byte) error {
     return nil
 }
 
+func (client *Client) SetStr(key string, val string) error {
+    _, err := client.sendCommand("SET", key, val)
+
+    if err != nil {
+        return err
+    }
+
+    return nil
+}
+
+func (client *Client) SetInt(key string, val int64) error {
+    return client.SetStr(key, strconv.FormatInt(val, 10))
+}
+
 func (client *Client) Get(key string) ([]byte, error) {
     res, _ := client.sendCommand("GET", key)
     if res == nil {
@@ -489,6 +503,24 @@ func (client *Client) Get(key string) ([]byte, error) {
 
     data := res.([]byte)
     return data, nil
+}
+
+func (client *Client) GetStr(key string) (string, error) {
+    res, _ := client.sendCommand("GET", key)
+    if res == nil {
+        return "", RedisError("Key `" + key + "` does not exist")
+    }
+
+    return string(res.([]byte)), nil
+}
+
+func (client *Client) GetInt(key string) (int64, error) {
+    res, err := client.GetStr(key)
+    if err != nil {
+        return 0, err
+    }
+    val, err := strconv.ParseInt(res, 10, 64)
+    return val, err
 }
 
 func (client *Client) Getset(key string, val []byte) ([]byte, error) {
